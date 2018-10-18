@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
-// import Cookies from 'js-cookie';
 import './App.css';
-// import post from './api.js';
-
-import axios from 'axios';
-import Slider from "react-slick";
-
+import {fetchData, range} from './utils/helper.js'
 
  
 class App extends Component {
@@ -15,56 +10,35 @@ class App extends Component {
         data: '',
         rowCount: 0,
         store: 'net-a-porter',
+        rankFirst: true,
         error: ''
     }
 
     this.handleStoreChange = this.handleStoreChange.bind(this);
+    this.handleButtonClick = this.handleButtonClick.bind(this);
   }
 
   componentDidMount() {
-    var bodyFormData = new FormData();
-    bodyFormData.append('store', this.state.store);
-    axios.post(`http://127.0.0.1:8000/products/`, bodyFormData)
-      .then(res => {
-        const data = res.data.data;
-        const rowCount = res.data.row_count;
-        this.setState({ data: data, rowCount: rowCount });
-      })
-      .catch(error => {
-        console.log(error.response)
-    });
-    // return post('http://127.0.0.1:8000/products/', bodyFormData);
-
-
+    fetchData.call(this, this.state.store);
   }
 
   handleStoreChange(event) {
     var value = event.target.value;
-    this.setState({ store: value });
-    var bodyFormData = new FormData();
-    bodyFormData.append('store', value);
-    axios.post(`http://127.0.0.1:8000/products/`, bodyFormData)
-      .then(res => {
-        const data = res.data.data;
-        const rowCount = res.data.row_count;
-        this.setState({ data: data, rowCount: rowCount });
-      })
-      .catch(error => {
-        console.log(error.response)
-    });
+    fetchData.call(this, value);
   };
+
+  handleButtonClick() {
+    this.setState(state => ({
+      rankFirst: !state.rankFirst
+    }), () => {
+      fetchData.call(this, this.state.store);
+    });
+  }
 
   render() {
     const { data, rowCount, store } = this.state;
     let rankNums = range(1, 10);
     let rowNums = range(1, rowCount);
-    var settings = {
-      dots: true,
-      infinite: true,
-      speed: 500,
-      slidesToShow: 2,
-      slidesToScroll: 2
-    };
 
     return (
       <div className="App">
@@ -80,56 +54,49 @@ class App extends Component {
                 <option value="shopbop">Shopbop</option>
                 <option value="farfetch">FarFetch</option>
                 <option value="moda-operandi">Moda-Operandi</option>
+                <option value="zara">Zara</option>
+                <option value="solid and striped">Solid and Striped</option>
               </select>
             </label>
           </div>
+          <button onClick={this.handleButtonClick}>
+            {this.state.rankFirst ? 'Show Next 10 Products' : 'Show Prev 10 Products'}
+          </button>
         </header>
-        <table id="product-table">
-          <thead>
-            <tr>
-              <th id="blank">&nbsp;</th>
-              {rankNums.map(i => (
-                <th id={"co" + i} headers="blank" key={i}>{i}</th>
-              ))}
-            </tr>
-          </thead>
-          
-          <tbody>
-            {rowNums.length > 0 ? (
-              rowNums.map(i => (
-                <tr>
-                  <th className="clip-animation" id={"r" + i} header="blank" key={i}>{data[i-1].department}</th>
-                  {range(1, data[i-1].data.length).map(j => (
-                    <td headers={"co" + j + " r" + i}>
-                      <div className="product-image">
-                        <a href="#" title="Full Image">
-                          <img src={data[i-1].data[j-1].image} alt={data[i-1].data[j-1].title} /> 
-                        </a>
-                        <div className="mask"></div>
-                      </div>
-                      <div className="product-title">
-                        <a href={data[i-1].data[j-1].link}>{data[i-1].data[j-1].title}</a>
-                      </div>
-                    </td>
-                  ))}
-                </tr>
-              ))
-            ) : (
-              <tr></tr>
-            )}
-          </tbody>
-          
-        </table>
+        {rowNums.length > 0 ? (
+          <table id="product-table">
+            <thead>
+              <tr>
+                <th id="blank">&nbsp;</th>
+                {rankNums.map(i => (
+                  <th id={"co" + i} headers="blank" key={i}>{i}</th>
+                ))}
+              </tr>
+            </thead>
+            
+            <tbody>
+              {rowNums.map(i => (
+                  <tr key={i}>
+                    <th className="clip-animation" id={"r" + i} header="blank" key={i}>{data[i-1].department}</th>
+                    {range(1, data[i-1].data.length).map(j => (
+                      <td key={j} headers={"co" + j + " r" + i}>
+                        <div className="product-image">
+                            <img src={data[i-1].data[j-1].image} alt={data[i-1].data[j-1].title} /> 
+                          <div className="mask"></div>
+                        </div>
+                        <div className="product-title">
+                          <a href={data[i-1].data[j-1].link} target="_blank">{data[i-1].data[j-1].title}</a>
+                        </div>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        ) : ('')}
       </div>
     );
   }
 }
  
 export default App;
-
-function range(start, end) {
-  let nums = [];
-  if (end > 10) { end =10; }
-  for (let i = start; i <= end; i++) nums.push(i);
-  return nums;
-}

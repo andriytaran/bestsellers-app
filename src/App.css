@@ -11,7 +11,23 @@
   justify-content: center;
   font-size: calc(15px + 2vmin);
   font-weight: bold;
+  margin-bottom: 20px;
+  position: relative;
   /* color: white; */
+}
+
+.App-header div {
+  position: absolute;
+  bottom: 0px;
+  left: 5px;
+  margin-left: 10px;
+}
+
+.App-header button {
+  position: absolute;
+  bottom: 0px;
+  right: 5px;
+  margin-right: 10px;
 }
 
 #product-table {
@@ -40,17 +56,28 @@ header select {
 #product-table th {
   padding: 15px;
     color: #fff;
-    text-shadow: 1px 1px 1px #568F23;
-    border: 1px solid #93CE37;
-    border-bottom: 3px solid #9ED929;
+    text-shadow: 1px 1px 1px rgb(20, 20, 19);
+    /* border: 1px solid #93CE37; */
+    /* border-bottom: 3px solid #9ED929; */
     background-color: #9DD929;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    background: -webkit-gradient( linear, left bottom, left top, color-stop(0.02, rgb(123,192,67)), color-stop(0.51, rgb(139,198,66)), color-stop(0.87, rgb(158,217,41)) );
+    /* border-top-left-radius: 5px;
+    border-top-right-radius: 5px; */
+    border-radius: 5px;
+    background: -webkit-gradient( linear, left bottom, left top, color-stop(0.02, rgb(244,125,79)), color-stop(0.51, rgb(244,120,60)), color-stop(0.87, rgb(224,120,60)) );
+}
+
+#product-table thead th {
+  font-size: 12px;
+  height: 25px;
+  padding: 1px;
+}
+
+#product-table tbody th {
+  background: -webkit-gradient( linear, left bottom, left top, color-stop(0.02, rgb(244,125,79)), color-stop(0.51, rgb(244,120,60)), color-stop(0.87, rgb(228, 238, 95)) );
 }
 
 #product-table td {
-  border: 1px solid #DEF39E;
+  border: 1px solid  #E0CAAD;
 }
 
 .product-image {
@@ -60,7 +87,7 @@ header select {
 .product-title {
   font-size: 12px;
   font-weight: normal;
-  width: 120px;
+  width: 115px;
   overflow: hidden;
   height: 60px;
 }
