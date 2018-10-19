@@ -101,6 +101,7 @@ header select {
   width: 115px;
   overflow: hidden;
   height: 60px;
+  margin: auto;
 }
 
 .product-title a {
