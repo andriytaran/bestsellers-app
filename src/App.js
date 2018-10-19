@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import {fetchData, range} from './utils/helper.js'
 
- 
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -11,6 +11,7 @@ class App extends Component {
         rowCount: 0,
         store: 'net-a-porter',
         rankFirst: true,
+        rankNums: range(1, 10),
         error: ''
     }
 
@@ -28,16 +29,25 @@ class App extends Component {
   };
 
   handleButtonClick() {
+    if (this.state.rankNums.includes(1))
+    {
+      this.setState({
+        rankNums: range(11, 20)
+      });
+    } else {
+      this.setState({
+        rankNums: range(1, 10)
+      });
+    }
     this.setState(state => ({
-      rankFirst: !state.rankFirst
+      rankFirst: !state.rankFirst,
     }), () => {
       fetchData.call(this, this.state.store);
     });
   }
 
   render() {
-    const { data, rowCount, store } = this.state;
-    let rankNums = range(1, 10);
+    const { data, rowCount, store, rankNums } = this.state;
     let rowNums = range(1, rowCount);
 
     return (
@@ -59,7 +69,7 @@ class App extends Component {
               </select>
             </label>
           </div>
-          <button onClick={this.handleButtonClick}>
+          <button onClick={this.handleButtonClick} className="next-btn">
             {this.state.rankFirst ? 'Show Next 10 Products' : 'Show Prev 10 Products'}
           </button>
         </header>
@@ -77,7 +87,7 @@ class App extends Component {
             <tbody>
               {rowNums.map(i => (
                   <tr key={i}>
-                    <th className="clip-animation" id={"r" + i} header="blank" key={i}>{data[i-1].department}</th>
+                    <th className="clip-animation" id={"r" + i} header="blank" key={i}>{data[i-1].department ? (data[i-1].department): ("Best Sellers")}</th>
                     {range(1, data[i-1].data.length).map(j => (
                       <td key={j} headers={"co" + j + " r" + i}>
                         <div className="product-image">

@@ -23,11 +23,15 @@
   margin-left: 10px;
 }
 
-.App-header button {
+.next-btn {
   position: absolute;
   bottom: 0px;
   right: 5px;
   margin-right: 10px;
+}
+
+.next-btn:active {
+  box-shadow: inset 0 1px 1px rgba(0,0,0,0.3);
 }
 
 #product-table {
@@ -39,6 +43,8 @@
   border-collapse: separate;
   margin-left: auto;
   margin-right: auto;
+  table-layout: fixed; 
+  width:100%;
 }
 
 header label {
@@ -51,6 +57,7 @@ header select {
 
 #product-table img {
   height: 120px;
+  max-width: 100%;
 }
 
 #product-table th {
@@ -78,6 +85,10 @@ header select {
 
 #product-table td {
   border: 1px solid  #E0CAAD;
+}
+
+#product-table tbody tr {
+  height: 190px;
 }
 
 .product-image {
@@ -147,3 +158,4 @@ header select {
 .product-image:hover img {
   opacity:1;
 }
+
