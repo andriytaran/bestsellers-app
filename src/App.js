@@ -11,6 +11,15 @@ import {
 } from "reactstrap";
 import logo from "./Zenabi.Logo.png";
 
+// function NextArrow(props) {
+//   return <span className="slick-next">next</span>;
+// }
+
+// function PrevArrow(props) {
+//   return <span className="slick-prev">prev</span>;
+// }
+
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -115,10 +124,11 @@ class App extends Component {
                     <div className="product-area">
                       {/* <Slider {...settings}> */}
                       {data[i-1].data.length >= 4 ?(
-                        <Slider dots={false} infinite={true} speed={1000} slidesToShow={4} slidesToScroll={4} >
+                        // <Slider dots={false} infinite={true} speed={1000} slidesToShow={4} slidesToScroll={4} nextArrow={<NextArrow />} prevArrow={<PrevArrow />} >
+                        <Slider dots={false} infinite={true} speed={1000} slidesToShow={4} slidesToScroll={4}>
                           {range(1, data[i-1].data.length).map(j => (
                             <div className="personal">
-                                <p>{data[i-1].data[j-1].rank}</p>
+                                <span>{data[i-1].data[j-1].rank}</span>
                               <div className="product-image">
                                 <a href={data[i-1].data[j-1].link} target="_blank">
                                   <img src={data[i-1].data[j-1].image} alt={data[i-1].data[j-1].title} /> 
