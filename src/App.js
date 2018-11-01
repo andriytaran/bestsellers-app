@@ -135,7 +135,7 @@ class App extends Component {
                                 </a>
                               </div>
                               <div className="product-title">
-                                <a href={data[i-1].data[j-1].link} target="_blank">{data[i-1].data[j-1].title}</a>
+                                <a href={data[i-1].data[j-1].link} target="_blank" style={{'-webkit-box-orient': 'vertical'}}>{data[i-1].data[j-1].title}</a>
                               </div>
                             </div>
                           ))}
