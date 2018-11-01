@@ -11,14 +11,6 @@ import {
 } from "reactstrap";
 import logo from "./Zenabi.Logo.png";
 
-// function NextArrow(props) {
-//   return <span className="slick-next">next</span>;
-// }
-
-// function PrevArrow(props) {
-//   return <span className="slick-prev">prev</span>;
-// }
-
 
 class App extends Component {
   constructor(props) {
@@ -47,14 +39,6 @@ class App extends Component {
   render() {
     const { data, rowCount, store, rankNums } = this.state;
     let rowNums = range(1, rowCount);
-    const settings = {
-      dots: false,
-      infinite: true,
-      speed: 1000,
-      slidesToShow: 4,
-      slidesToScroll: 4
-    };
-
     let img_list= []
 
     if (data.length > 0) {
@@ -93,7 +77,6 @@ class App extends Component {
                   <option value="solid and striped">Solid and Striped</option>
                 </select>
               </label>
-              {/* <input type="search" id="search" placeholder="Search.." /> */}
             </div>
           </div>
           {data ? (
@@ -107,7 +90,6 @@ class App extends Component {
                       <h2>
                         {data[i-1].department}
                       </h2>
-                      {/* <a href="#">View all</a> */}
                     </div>
                   ) : (
                     <div className="department-area">
@@ -115,16 +97,13 @@ class App extends Component {
                       <h2>
                         Best Sellers
                       </h2>
-                      {/* <a href="#">View all</a> */}
                     </div>
                   )}
                     
                   </Col>
                   <Col md={9} xs={9} className="product-line">
                     <div className="product-area">
-                      {/* <Slider {...settings}> */}
                       {data[i-1].data.length >= 4 ?(
-                        // <Slider dots={false} infinite={true} speed={1000} slidesToShow={4} slidesToScroll={4} nextArrow={<NextArrow />} prevArrow={<PrevArrow />} >
                         <Slider dots={false} infinite={true} speed={1000} slidesToShow={4} slidesToScroll={4}>
                           {range(1, data[i-1].data.length).map(j => (
                             <div className="personal">
