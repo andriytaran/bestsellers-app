@@ -102,8 +102,8 @@ class App extends Component {
                     
                   </Col>
                   <Col md={9} xs={9} className="product-line">
-                    <div className="product-area">
-                      {data[i-1].data.length >= 4 ?(
+                    {data[i-1].data.length >= 4 ?(
+                      <div className="product-area">
                         <Slider dots={false} infinite={true} speed={1000} slidesToShow={4} slidesToScroll={4}>
                           {range(1, data[i-1].data.length).map(j => (
                             <div className="personal">
@@ -119,23 +119,25 @@ class App extends Component {
                             </div>
                           ))}
                       </Slider>
-                      ) : (
-                        <Slider dots={false} infinite={true} speed={1000} slidesToShow={data[i-1].data.length} slidesToScroll={data[i-1].data.length} >
-                          {range(1, data[i-1].data.length).map(j => (
-                            <div className="personal">
-                              <div className="product-image">
-                                <a href={data[i-1].data[j-1].link} target="_blank">
-                                  <img src={data[i-1].data[j-1].image} alt={data[i-1].data[j-1].title} /> 
-                                </a>
-                              </div>
-                              <div className="product-title">
-                                <a href={data[i-1].data[j-1].link} target="_blank">{data[i-1].data[j-1].title}</a>
-                              </div>
-                            </div>
-                          ))}
-                        </Slider>
-                      )}
                     </div>
+                      ) : (
+                        <div className="product-area less" style={{width: `calc(100% / 4 * ${data[i-1].data.length})`, borderRight: '1px solid #d3d7de'}}>
+                          <Slider dots={false} infinite={true} speed={1000} slidesToShow={data[i-1].data.length} slidesToScroll={data[i-1].data.length} >
+                            {range(1, data[i-1].data.length).map(j => (
+                              <div className="personal">
+                                <div className="product-image">
+                                  <a href={data[i-1].data[j-1].link} target="_blank">
+                                    <img src={data[i-1].data[j-1].image} alt={data[i-1].data[j-1].title} /> 
+                                  </a>
+                                </div>
+                                <div className="product-title">
+                                  <a href={data[i-1].data[j-1].link} target="_blank">{data[i-1].data[j-1].title}</a>
+                                </div>
+                              </div>
+                            ))}
+                          </Slider>
+                        </div>
+                      )}
                   </Col>
                 </Row>
               ))}
