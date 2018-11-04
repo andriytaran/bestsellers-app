@@ -18,7 +18,7 @@ class App extends Component {
     this.state = {
         data: '',
         rowCount: 0,
-        store: 'net-a-porter',
+        store: 'amazon',
         rankFirst: true,
         rankNums: range(1, 10),
         error: ''
@@ -68,6 +68,8 @@ class App extends Component {
             <div className="toolbar">
               <label>Store 
                 <select id="store" onChange={this.handleStoreChange} value={store}>
+                  <option value="amazon">Amazon</option>
+                  <option value="amazon-women">Amazon-Women</option>
                   <option value="net-a-porter">Net-A-Porter</option>
                   <option value="revolve">Revolve</option>
                   <option value="shopbop">Shopbop</option>
