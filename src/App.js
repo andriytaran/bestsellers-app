@@ -109,7 +109,7 @@ class App extends Component {
                         <Slider dots={false} infinite={true} speed={1000} slidesToShow={4} slidesToScroll={4}>
                           {range(1, data[i-1].data.length).map(j => (
                             <div className="personal">
-                                <span>{data[i-1].data[j-1].rank}</span>
+                              <span>{data[i-1].data[j-1].rank}</span>
                               <div className="product-image">
                                 <a href={data[i-1].data[j-1].link} target="_blank">
                                   <img src={data[i-1].data[j-1].image} alt={data[i-1].data[j-1].title} /> 
@@ -127,6 +127,7 @@ class App extends Component {
                           <Slider dots={false} infinite={true} speed={1000} slidesToShow={data[i-1].data.length} slidesToScroll={data[i-1].data.length} >
                             {range(1, data[i-1].data.length).map(j => (
                               <div className="personal">
+                              <span>{data[i-1].data[j-1].rank}</span>
                                 <div className="product-image">
                                   <a href={data[i-1].data[j-1].link} target="_blank">
                                     <img src={data[i-1].data[j-1].image} alt={data[i-1].data[j-1].title} /> 
