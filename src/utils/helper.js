@@ -10,7 +10,7 @@ export function fetchData(value) {
             bodyFormData.append('is_first_rank', this.state.rankFirst);
         }
         );
-    axios.post(`http://127.0.0.1:8000/products/`, bodyFormData)
+    axios.post(`https://backend-dot-zenabi-bestsellers.appspot.com/products/`, bodyFormData)
         .then(res => {
         const data = res.data.data;
         const rowCount = res.data.row_count;
@@ -20,7 +20,6 @@ export function fetchData(value) {
         console.log(error.response)
     });
 }
-
 
 export function range(start, end) {
     let nums = [];
