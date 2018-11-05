@@ -107,6 +107,8 @@ class App extends Component {
                   <option value="shopbop">Shopbop</option>
                   <option value="farfetch">FarFetch</option>
                   <option value="moda-operandi">Moda-Operandi</option>
+                  <option value="zara">Zara</option>
+                  <option value="solid and striped">Solid and Striped</option>
                 </select>
               </label>
             </div>
