@@ -12,6 +12,30 @@ import {
 import logo from "./Zenabi.Logo.png";
 
 
+const sliderSettings = ( slidesToShow = 4, slidesToScroll = 4 ) => ({
+  dots: false,
+  infinite: true,
+  speed: 1000,
+  slidesToShow,
+  slidesToScroll,
+  responsive: [{
+    breakpoint: 768,
+    slidesToScroll: 1,
+    settings: {
+      slidesToShow: 1,
+      slidesToScroll: 1,
+    }
+  }, {
+    breakpoint: 900,
+    slidesToScroll: 2,
+    settings: {
+      slidesToShow: 2,
+      slidesToScroll: 1,
+    }
+  }]
+});
+
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -55,7 +79,7 @@ class App extends Component {
       }
     }
   
-    return (
+    return ( 
       <div className="App">
         <div className="header">
           <div className="logo-img">
@@ -75,8 +99,6 @@ class App extends Component {
                   <option value="shopbop">Shopbop</option>
                   <option value="farfetch">FarFetch</option>
                   <option value="moda-operandi">Moda-Operandi</option>
-                  <option value="zara">Zara</option>
-                  <option value="solid and striped">Solid and Striped</option>
                 </select>
               </label>
             </div>
@@ -103,44 +125,52 @@ class App extends Component {
                   )}
                     
                   </Col>
-                  <Col md={9} xs={9} className="product-line">
-                    {data[i-1].data.length >= 4 ?(
-                      <div className="product-area">
-                        <Slider dots={false} infinite={true} speed={1000} slidesToShow={4} slidesToScroll={4}>
-                          {range(1, data[i-1].data.length).map(j => (
-                            <div className="personal">
-                              <span>{data[i-1].data[j-1].rank}</span>
-                              <div className="product-image">
-                                <a href={data[i-1].data[j-1].link} target="_blank">
-                                  <img src={data[i-1].data[j-1].image} alt={data[i-1].data[j-1].title} /> 
-                                </a>
-                              </div>
-                              <div className="product-title">
-                                <a href={data[i-1].data[j-1].link} target="_blank" style={{'-webkit-box-orient': 'vertical'}}>{data[i-1].data[j-1].title}</a>
-                              </div>
-                            </div>
-                          ))}
-                      </Slider>
-                    </div>
-                      ) : (
-                        <div className="product-area less" style={{width: `calc(100% / 4 * ${data[i-1].data.length})`, borderRight: '1px solid #d3d7de'}}>
-                          <Slider dots={false} infinite={true} speed={1000} slidesToShow={data[i-1].data.length} slidesToScroll={data[i-1].data.length} >
+                  <Col md={9} xs={9}>
+                    <>
+                     <h2>{data[i-1].department}</h2>
+               
+                     <div className="product-line">
+                      
+                      {data[i-1].data.length >= 4 ?(
+
+                        <div className="product-area">
+                          <Slider {...sliderSettings()}>
                             {range(1, data[i-1].data.length).map(j => (
                               <div className="personal">
-                              <span>{data[i-1].data[j-1].rank}</span>
+                                <span>{data[i-1].data[j-1].rank}</span>
                                 <div className="product-image">
                                   <a href={data[i-1].data[j-1].link} target="_blank">
                                     <img src={data[i-1].data[j-1].image} alt={data[i-1].data[j-1].title} /> 
                                   </a>
                                 </div>
                                 <div className="product-title">
-                                  <a href={data[i-1].data[j-1].link} target="_blank">{data[i-1].data[j-1].title}</a>
+                                  <a href={data[i-1].data[j-1].link} target="_blank" style={{'-webkit-box-orient': 'vertical'}}>{data[i-1].data[j-1].title}</a>
                                 </div>
                               </div>
                             ))}
-                          </Slider>
-                        </div>
-                      )}
+                        </Slider>
+                      </div>
+                        ) : (
+                          <div className="product-area less" style={{width: `calc(100% / 4 * ${data[i-1].data.length})`, borderRight: '1px solid #d3d7de'}}>
+                           <Slider {...sliderSettings(data[i-1].data.length, data[i-1].data.length)}>
+                              {range(1, data[i-1].data.length).map(j => (
+                                <div className="personal">
+                                <span>{data[i-1].data[j-1].rank}</span>
+                                  <div className="product-image">
+                                    <a href={data[i-1].data[j-1].link} target="_blank">
+                                      <img src={data[i-1].data[j-1].image} alt={data[i-1].data[j-1].title} /> 
+                                    </a>
+                                  </div>
+                                  <div className="product-title">
+                                    <a href={data[i-1].data[j-1].link} target="_blank">{data[i-1].data[j-1].title}</a>
+                                  </div>
+                                </div>
+                              ))}
+                            </Slider>
+                          </div>
+                        )}
+                     </div>
+                    </>
                   </Col>
                 </Row>
               ))}
