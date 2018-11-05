@@ -53,6 +53,8 @@ class App extends Component {
 
   componentDidMount() {
     fetchData.call(this, this.state.store);
+    this.checkViewport();
+    window.addEventListener("resize", () => this.checkViewport());
   }
 
   handleStoreChange(event) {
@@ -60,8 +62,14 @@ class App extends Component {
     fetchData.call(this, value);
   };
 
+  checkViewport() {
+   this.setState({
+    isMobile: window.innerWidth <= 768
+   });
+  }
+
   render() {
-    const { data, rowCount, store, rankNums } = this.state;
+    const { data, rowCount, store, rankNums, isMobile } = this.state;
     let rowNums = range(1, rowCount);
     let img_list= []
 
@@ -105,38 +113,66 @@ class App extends Component {
           </div>
           {data ? (
             <Container fluid>
-              {rowNums.map(i => (
-                <Row className="row">
-                  <Col md={3} xs={3}>
-                  {data[i-1].department ? (
-                    <div className="department-area">
-                      <img src={img_list[i-1]} />
-                      <h2>
-                        {data[i-1].department}
-                      </h2>
+              {rowNums.map(i => {
+                const tiles = range(1, data[i-1].data.length).map(j => (
+                  <div className="personal">
+                    <span>{data[i-1].data[j-1].rank}</span>
+                    <div className="product-image">
+                      <a href={data[i-1].data[j-1].link} target="_blank">
+                        <img src={data[i-1].data[j-1].image} alt={data[i-1].data[j-1].title} /> 
+                      </a>
                     </div>
-                  ) : (
-                    <div className="department-area">
-                      <img src={require('./img/best-seller/Best-Seller.png')} />
-                      <h2>
-                        Best Sellers
-                      </h2>
+                    <div className="product-title">
+                      <a href={data[i-1].data[j-1].link} target="_blank" style={{'-webkit-box-orient': 'vertical'}}>{data[i-1].data[j-1].title}</a>
                     </div>
-                  )}
-                    
-                  </Col>
-                  <Col md={9} xs={9}>
-                    <>
-                     <h2>{data[i-1].department}</h2>
-               
-                     <div className="product-line">
-                      
-                      {data[i-1].data.length >= 4 ?(
+                  </div>
+                ));
 
-                        <div className="product-area">
-                          <Slider {...sliderSettings()}>
-                            {range(1, data[i-1].data.length).map(j => (
-                              <div className="personal">
+                if ( isMobile ) {
+                  tiles.unshift(
+                    data[i-1].department ? (
+                      <div className="department-area">
+                        <img src={img_list[i-1]} />
+                        <h2>
+                          {data[i-1].department}
+                        </h2>
+                      </div>
+                    ) : (
+                      <div className="department-area">
+                        <img src={require('./img/best-seller/Best-Seller.png')} />
+                        <h2>
+                          Best Sellers
+                        </h2>
+                      </div>
+                    )
+                  ) 
+                }
+
+                return (
+                  <Row className="row">
+                    <Col md={3} xs={3}>
+                    {data[i-1].department ? (
+                      <div className="department-area">
+                        <img src={img_list[i-1]} />
+                        <h2>
+                          {data[i-1].department}
+                        </h2>
+                      </div>
+                    ) : (
+                      <div className="department-area">
+                        <img src={require('./img/best-seller/Best-Seller.png')} />
+                        <h2>
+                          Best Sellers
+                        </h2>
+                      </div>
+                    )}
+                      
+                    </Col>
+                    <Col md={9} xs={9}>
+                      <div className="product-line">
+                          {data[i-1].data.length >= 4 ? (() => {
+                            const tiles = range(1, data[i-1].data.length).map(j => (
+                              <div className="personal" key={data[i-1].link}>
                                 <span>{data[i-1].data[j-1].rank}</span>
                                 <div className="product-image">
                                   <a href={data[i-1].data[j-1].link} target="_blank">
@@ -147,33 +183,46 @@ class App extends Component {
                                   <a href={data[i-1].data[j-1].link} target="_blank" style={{'-webkit-box-orient': 'vertical'}}>{data[i-1].data[j-1].title}</a>
                                 </div>
                               </div>
-                            ))}
-                        </Slider>
+                            ));
+
+                            if ( isMobile ) {
+                              tiles.unshift(
+                                data[i-1].department ? (
+                                  <div className="department-area">
+                                    <img src={img_list[i-1]} />
+                                    <h2>
+                                      {data[i-1].department}
+                                    </h2>
+                                  </div>
+                                ) : (
+                                  <div className="department-area">
+                                    <img src={require('./img/best-seller/Best-Seller.png')} />
+                                    <h2>
+                                      Best Sellers
+                                    </h2>
+                                  </div>
+                                )
+                              ) 
+                            }
+
+                            return (
+                              <div className="product-area">
+                                  <Slider {...sliderSettings()}>
+                                    {tiles}
+                                </Slider>
+                              </div>
+                            )
+                          })() : (
+                            <div className="product-area less" style={{width: `calc(100% / 4 * ${data[i-1].data.length})`, borderRight: '1px solid #d3d7de'}}>
+                              <Slider {...sliderSettings(data[i-1].data.length, data[i-1].data.length)}>
+                                {tiles}
+                              </Slider>
+                            </div>
+                          )}
                       </div>
-                        ) : (
-                          <div className="product-area less" style={{width: `calc(100% / 4 * ${data[i-1].data.length})`, borderRight: '1px solid #d3d7de'}}>
-                           <Slider {...sliderSettings(data[i-1].data.length, data[i-1].data.length)}>
-                              {range(1, data[i-1].data.length).map(j => (
-                                <div className="personal">
-                                <span>{data[i-1].data[j-1].rank}</span>
-                                  <div className="product-image">
-                                    <a href={data[i-1].data[j-1].link} target="_blank">
-                                      <img src={data[i-1].data[j-1].image} alt={data[i-1].data[j-1].title} /> 
-                                    </a>
-                                  </div>
-                                  <div className="product-title">
-                                    <a href={data[i-1].data[j-1].link} target="_blank">{data[i-1].data[j-1].title}</a>
-                                  </div>
-                                </div>
-                              ))}
-                            </Slider>
-                          </div>
-                        )}
-                     </div>
-                    </>
-                  </Col>
-                </Row>
-              ))}
+                    </Col>
+                  </Row>
+                )})}
             </Container>
           ) : (
             <h2>No data available!</h2>

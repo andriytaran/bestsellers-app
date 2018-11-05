@@ -404,9 +404,29 @@ h2.title span {
   .col-9 {
     max-width: 100% !important;
   }
+  #logo-img {
+    margin: auto;
+    padding: 0;
+    display: block;
+  }
+  h2.title {
+   width: auto;
+   margin-left: 0;
+  }
 }
 @media only screen and (min-width: 768px) {
   .main-body .row .col-9 h2 {
     display: none;
   }
+}
+
+
+.product-area .department-area {
+ position: relative;
+}
+.product-area .department-area img {
+  width: 100%;
+  object-fit: cover;
+}
+.product-area .department-area img {
 }
