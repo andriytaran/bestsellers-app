@@ -18,7 +18,7 @@ class App extends Component {
     this.state = {
         data: '',
         rowCount: 0,
-        store: 'amazon',
+        store: 'amazon-women',
         rankFirst: true,
         rankNums: range(1, 10),
         error: ''
