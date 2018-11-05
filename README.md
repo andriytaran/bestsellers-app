@@ -1,3 +1,5 @@
+# Bestsellers - Frontend [![CircleCI](https://circleci.com/gh/Zenabidata/React_Bestsellers-app/tree/master.svg?style=svg)](https://circleci.com/gh/Zenabidata/React_Bestsellers-app/tree/master)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
