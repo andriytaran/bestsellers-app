@@ -158,7 +158,11 @@ class App extends Component {
                   tiles.unshift(
                     data[i-1].department ? (
                       <div className="department-area">
-                        <img src={img_list[i-1]} />
+                        {store === 'amazon' ? (
+                            <img src={require('./img/best-seller/Best-Seller.png')} />
+                          ) : (
+                            <img src={img_list[i-1]} />
+                          )}
                         <h2>
                           {data[i-1].department}
                         </h2>
@@ -179,7 +183,11 @@ class App extends Component {
                     <Col md={3} xs={3}>
                       {data[i-1].department ? (
                         <div className="department-area">
-                          <img src={img_list[i-1]} />
+                          {store === 'amazon' ? (
+                            <img src={require('./img/best-seller/Best-Seller.png')} />
+                          ) : (
+                            <img src={img_list[i-1]} />
+                          )}
                           <h2>
                             {data[i-1].department}
                           </h2>
@@ -215,7 +223,11 @@ class App extends Component {
                             tiles.unshift(
                               data[i-1].department ? (
                                 <div className="department-area">
-                                  <img src={img_list[i-1]} />
+                                  {store === 'amazon' ? (
+                                    <img src={require('./img/best-seller/Best-Seller.png')} />
+                                  ) : (
+                                    <img src={img_list[i-1]} />
+                                  )}
                                   <h2>
                                     {data[i-1].department}
                                   </h2>
