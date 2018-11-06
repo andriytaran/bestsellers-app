@@ -410,6 +410,9 @@ h2.title span {
     max-width: 100% !important;
     flex: 1 !important;
   }
+  .personal {
+   max-width: 100%;
+  }
   #logo-img {
     margin: auto;
     padding: 0;
