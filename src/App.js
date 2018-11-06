@@ -41,6 +41,9 @@ class App extends Component {
 
   handleDepartmentChange(event) {
     var value = event.target.value;
+    if (value === '') {
+      fetchData.call(this, this.state.store);
+    }
     fetchDataByDepartment.call(this, value);
   };
 
