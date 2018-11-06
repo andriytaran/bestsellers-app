@@ -191,6 +191,7 @@ h2.title span {
 
 .department-area {
   height: 337px;
+  position: relative;
 }
 
 .department-area img {
@@ -403,6 +404,7 @@ h2.title span {
   }
   .col-9 {
     max-width: 100% !important;
+    flex: 1 !important;
   }
   #logo-img {
     margin: auto;
@@ -429,4 +431,29 @@ h2.title span {
   object-fit: cover;
 }
 .product-area .department-area img {
+}
+.product-grid {
+ background: #eeeeee;
+ display: grid;
+ grid-gap: 1px;
+ grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+.product-area .department-area {
+ position: relative;
+ overflow: hidden;
+}
+.product-grid .department-area img {
+  width: 100%;
+  height: auto;
+  margin: 0;
+}
+.product-grid img {
+ display: block;
+ margin: 0 auto;
+}
+.product-grid > div {
+ background: #fff;
+}
+.product-grid .personal {
+ max-width: 100%;
 }

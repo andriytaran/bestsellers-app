@@ -86,6 +86,10 @@ class App extends Component {
         }
       }
     }
+
+   console.log("uhhh")
+
+   console.log({ data });
   
     return ( 
       <div className="App">
@@ -202,16 +206,18 @@ class App extends Component {
                                     </h2>
                                   </div>
                                 )
-                              ) 
+                              );
                             }
 
-                            return (
+                            return data[i-1].department ? (
                               <div className="product-area">
-                                  <Slider {...sliderSettings()}>
+                               <Slider {...sliderSettings()}>
                                     {tiles}
                                 </Slider>
                               </div>
-                            )
+                            ) : (
+                             <div className="product-grid">{tiles}</div>
+                            );
                           })() : (
                             <div className="product-area less" style={{width: `calc(100% / 4 * ${data[i-1].data.length})`, borderRight: '1px solid #d3d7de'}}>
                               <Slider {...sliderSettings(data[i-1].data.length, data[i-1].data.length)}>
