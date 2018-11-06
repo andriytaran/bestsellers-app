@@ -251,7 +251,7 @@ class App extends Component {
                 )})}
             </Container>
           ) : (
-            <h2>No data available!</h2>
+            <h2>Loading . . .</h2>
           )}
         </div>
       </div>
