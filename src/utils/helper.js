@@ -10,8 +10,8 @@ export function fetchData(value) {
             bodyFormData.append('is_first_rank', this.state.rankFirst);
         }
         );
-    // axios.post(`https://backend-dot-zenabi-bestsellers.appspot.com/products/`, bodyFormData)
-    axios.post(`http://localhost:8000/products/`, bodyFormData)
+    axios.post(`https://backend-dot-zenabi-bestsellers.appspot.com/products/`, bodyFormData)
+    // axios.post(`http://localhost:8000/products/`, bodyFormData)
         .then(res => {
         const data = res.data.data;
         const rowCount = res.data.row_count;
@@ -33,8 +33,8 @@ export function fetchDataByDepartment(value) {
             bodyFormData.append('is_first_rank', this.state.rankFirst);
         }
     );
-    // axios.post(`https://backend-dot-zenabi-bestsellers.appspot.com/products/`, bodyFormData)
-    axios.post(`http://localhost:8000/products-department/`, bodyFormData)
+    axios.post(`https://backend-dot-zenabi-bestsellers.appspot.com/products-department/`, bodyFormData)
+    // axios.post(`http://localhost:8000/products-department/`, bodyFormData)
         .then(res => {
         const data = res.data.data;
         const rowCount = res.data.row_count;
