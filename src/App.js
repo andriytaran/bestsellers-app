@@ -128,7 +128,7 @@ class App extends Component {
                   <option value=""></option>
                   {departmentList ? (
                       departmentList.map(d => (
-                        <option value={d}>{d}</option>
+                        <option value={d} key={d}>{d}</option>
                       ))
                   ) : (
                     <option value=""></option>
@@ -233,7 +233,7 @@ class App extends Component {
 
                           return data[i-1].department ? (
                             <div className="product-area">
-                             <Slider {...sliderSettings()}>
+                             <Slider {...sliderSettings()} key={`${this.state.store}__${data[i-1].department}`}>
                                   {tiles}
                               </Slider>
                             </div>
