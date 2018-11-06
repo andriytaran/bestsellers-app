@@ -34,7 +34,7 @@
   font-weight: bold;
 }
 
-#store {
+#store, #department {
   margin-left: 5px;
   background-color: #d2dce3;
   border: 0px;
@@ -42,6 +42,10 @@
   width: 140px;
   height: 30px;
   padding-left: 10px;
+}
+
+#store {
+  margin-right: 20px;
 }
 
 .toolbar {

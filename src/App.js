@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import {fetchData, range} from './utils/helper.js'
+import {fetchData, fetchDataByDepartment, range} from './utils/helper.js'
 import Slider from "react-slick";
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -19,12 +19,15 @@ class App extends Component {
         data: '',
         rowCount: 0,
         store: 'amazon-women',
+        departmentSelect: '',
+        departmentList: [],
         rankFirst: true,
         rankNums: range(1, 10),
         error: ''
     }
 
     this.handleStoreChange = this.handleStoreChange.bind(this);
+    this.handleDepartmentChange = this.handleDepartmentChange.bind(this);
   }
 
   componentDidMount() {
@@ -36,8 +39,13 @@ class App extends Component {
     fetchData.call(this, value);
   };
 
+  handleDepartmentChange(event) {
+    var value = event.target.value;
+    fetchDataByDepartment.call(this, value);
+  };
+
   render() {
-    const { data, rowCount, store, rankNums } = this.state;
+    const { data, rowCount, store, departmentSelect, departmentList, rankNums } = this.state;
     let rowNums = range(1, rowCount);
     let img_list= []
 
@@ -68,8 +76,9 @@ class App extends Component {
             <div className="toolbar">
               <label>Store 
                 <select id="store" onChange={this.handleStoreChange} value={store}>
+                  <option value="amazon">Amazon</option>
                   <option value="amazon-women">Amazon-Women</option>
-                  <option value="amazon">Amazon-Fashion</option>
+                  <option value="amazon-fashion">Amazon-Fashion</option>
                   <option value="net-a-porter">Net-A-Porter</option>
                   <option value="revolve">Revolve</option>
                   <option value="shopbop">Shopbop</option>
@@ -77,6 +86,18 @@ class App extends Component {
                   <option value="moda-operandi">Moda-Operandi</option>
                   <option value="zara">Zara</option>
                   <option value="solid and striped">Solid and Striped</option>
+                </select>
+              </label>
+              <label>Department 
+                <select id="department" onChange={this.handleDepartmentChange} value={departmentSelect}>
+                  <option value=""></option>
+                  {departmentList ? (
+                      departmentList.map(d => (
+                        <option value={d}>{d}</option>
+                      ))
+                  ) : (
+                    <option value=""></option>
+                  )}
                 </select>
               </label>
             </div>
