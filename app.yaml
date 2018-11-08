@@ -1,2 +1,6 @@
 runtime: nodejs
 env: flex
+
+env_variables:
+  # Application Settings
+  REACT_APP_API_URL: "https://backend-dot-zenabi-bestsellers.appspot.com"
