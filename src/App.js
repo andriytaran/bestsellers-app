@@ -137,7 +137,7 @@ class App extends Component {
                   <option value="farfetch">FarFetch</option>
                   <option value="moda-operandi">Moda-Operandi</option>
                   <option value="zara">Zara</option>
-                  <option value="solid and striped">Solid and Striped</option>
+                  {/*<option value="solid and striped">Solid and Striped</option>*/}
                 </select>
               </label>
               <label>Department
