@@ -42,7 +42,7 @@ class App extends Component {
     this.state = {
         data: '',
         rowCount: 0,
-        store: 'amazon-women',
+        store: '_all',
         departmentSelect: '',
         departmentList: [],
         rankFirst: true,
@@ -51,6 +51,7 @@ class App extends Component {
     }
 
     this.handleStoreChange = this.handleStoreChange.bind(this);
+    this.handleBestsellersChange = this.handleBestsellersChange.bind(this);
     this.handleDepartmentChange = this.handleDepartmentChange.bind(this);
   }
 
@@ -62,8 +63,18 @@ class App extends Component {
 
   handleStoreChange(event) {
     const value = event.target.value;
-    fetchData.call(this, value);
+    this.setState({ departmentList: [] }, () => fetchData.call(this, value));
   };
+
+  handleBestsellersChange(event) {
+    const value = event.target.value;
+    if (value === '') {
+      fetchData.call(this, this.state.store);
+    }
+    this.setState({ store: value, department: 'Bestsellers', departmentList: [] }, () => {
+      fetchDataByDepartment.call(this, 'Bestsellers');
+    });
+  }
 
   handleDepartmentChange(event) {
     const value = event.target.value;
@@ -87,7 +98,12 @@ class App extends Component {
     if (data.length > 0) {
       for (var i = 0; i < rowCount; i++) {
         try {
-          var temp = require('./img/' + store.toLowerCase() + '/' + data[i].department + '.png');
+          var temp;
+          if (data[i].department.endsWith('Bestsellers')) {
+            temp = require('./img/best-seller/Best-Seller.png');
+          } else {
+            temp = require('./img/' + store.toLowerCase() + '/' + data[i].department + '.png');
+          }
         }
         catch {
           var temp = require('./img/no_image.png');
@@ -97,8 +113,8 @@ class App extends Component {
         }
       }
     }
-  
-    return ( 
+
+    return (
       <div className="App">
         <div className="header">
           <div className="logo-img">
@@ -109,8 +125,9 @@ class App extends Component {
           <div className="body-header">
             <h2 className="title"><span>Best Sellers</span></h2>
             <div className="toolbar">
-              <label>Store 
+              <label>Store
                 <select id="store" onChange={this.handleStoreChange} value={store}>
+                  <option value="_all">All</option>
                   <option value="amazon">Amazon</option>
                   <option value="amazon-women">Amazon-Women</option>
                   <option value="amazon-fashion">Amazon-Fashion</option>
@@ -123,17 +140,30 @@ class App extends Component {
                   <option value="solid and striped">Solid and Striped</option>
                 </select>
               </label>
-              <label>Department 
-                <select id="department" onChange={this.handleDepartmentChange} value={departmentSelect}>
-                  <option value=""></option>
-                  {departmentList ? (
-                      departmentList.map(d => (
-                        <option value={d} key={d}>{d}</option>
-                      ))
-                  ) : (
+              <label>Department
+                {store === '_all' ? (
+                  <select id="department" onChange={this.handleBestsellersChange} value={departmentSelect}>
                     <option value=""></option>
-                  )}
-                </select>
+                    {departmentList ? (
+                        departmentList.map(d => (
+                          <option value={d.value} key={d.value}>{d.display}</option>
+                        ))
+                    ) : (
+                      <option value=""></option>
+                    )}
+                  </select>
+                ) : (
+                  <select id="department" onChange={this.handleDepartmentChange} value={departmentSelect}>
+                    <option value=""></option>
+                    {departmentList ? (
+                        departmentList.map(d => (
+                          <option value={d} key={d}>{d}</option>
+                        ))
+                    ) : (
+                      <option value=""></option>
+                    )}
+                  </select>
+                )}
               </label>
             </div>
           </div>
@@ -260,5 +290,5 @@ class App extends Component {
     );
   }
 }
- 
+
 export default App;
