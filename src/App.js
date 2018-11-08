@@ -1,14 +1,21 @@
 import React, { Component } from 'react';
 import './App.css';
-import {fetchData, fetchDataByDepartment, range} from './utils/helper.js'
-import Slider from "react-slick";
+import {
+  ALL_DEPARTMENT,
+  BESTSELLERS_DEPARTMENT,
+  ALL_STORE,
+  STORES
+} from './utils/domain';
+import { range } from './utils/helper';
+import { fetchDataByDepartment } from './utils/api';
+import Slider from 'react-slick';
 import 'bootstrap/dist/css/bootstrap.css';
 
 import {
   Container,
   Row,
   Col
-} from "reactstrap";
+} from 'reactstrap';
 import logo from "./Zenabi.Logo.png";
 
 
@@ -40,73 +47,105 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-        data: '',
-        rowCount: 0,
-        store: '_all',
-        departmentSelect: '',
-        departmentList: [],
-        rankFirst: true,
-        rankNums: range(1, 10),
-        error: ''
+      data: null,
+      rowCount: 0,
+      store: ALL_STORE,
+      department: ALL_DEPARTMENT,
+      departmentList: [],
+      rankFirst: true,
+      rankNums: range(1, 10),
+      error: ''
     }
 
     this.handleStoreChange = this.handleStoreChange.bind(this);
-    this.handleBestsellersChange = this.handleBestsellersChange.bind(this);
     this.handleDepartmentChange = this.handleDepartmentChange.bind(this);
   }
 
   componentDidMount() {
-    fetchData.call(this, this.state.store);
+    this.fetchData();
     this.checkViewport();
     window.addEventListener("resize", () => this.checkViewport());
   }
 
-  handleStoreChange(event) {
-    const value = event.target.value;
-    this.setState({ departmentList: [] }, () => fetchData.call(this, value));
-  };
-
-  handleBestsellersChange(event) {
-    const value = event.target.value;
-    if (value === '') {
-      fetchData.call(this, this.state.store);
-    }
-    this.setState({ store: value, department: 'Bestsellers', departmentList: [] }, () => {
-      fetchDataByDepartment.call(this, 'Bestsellers');
+  fetchData(store = this.state.store, department = this.state.department) {
+    this.setState({
+      data: null,
+      rowCount: 0,
+      error: '',
+      store,
+      department,
+      ...(store !== this.state.store ? {
+        departmentList: []
+      } : {})
+    }, async () => {
+      const { store, departmentList: oldDepartmentList } = this.state;
+      const data = await fetchDataByDepartment(store, department, { rankFirst: this.state.rankFirst }).catch(err => {
+        this.setState({
+          data: null,
+          rowCount: 0,
+          error: err.toString(),
+          store,
+          department
+        });
+        throw err;
+      });
+      const departmentList = oldDepartmentList.length ? oldDepartmentList : data.map(d => d.department);
+      const rowCount = data.length;
+      this.setState({
+        data,
+        rowCount,
+        error: '',
+        store,
+        department,
+        departmentList
+      });
     });
   }
 
+  handleStoreChange(event) {
+    const store = event.target.value;
+    this.fetchData(store, ALL_DEPARTMENT);
+  };
+
   handleDepartmentChange(event) {
-    const value = event.target.value;
-    if (value === '') {
-      fetchData.call(this, this.state.store);
-    }
-    fetchDataByDepartment.call(this, value);
+    const department = event.target.value;
+    this.fetchData(this.state.store, department);
   };
 
   checkViewport() {
-      this.setState({
-          isMobile: window.innerWidth <= 768
-      });
+    this.setState({
+      isMobile: window.innerWidth <= 768
+    });
   }
 
   render() {
-    const { data, rowCount, store, departmentSelect, departmentList, rankNums, isMobile } = this.state;
+    const { data, rowCount, store, department, departmentList, rankNums, isMobile, error } = this.state;
     let rowNums = range(1, rowCount);
     let img_list= []
 
-    if (data.length > 0) {
+    if (data && data.length > 0) {
       for (var i = 0; i < rowCount; i++) {
+        var temp = '';
         try {
-          var temp;
-          if (data[i].department.endsWith('Bestsellers')) {
-            temp = require('./img/best-seller/Best-Seller.png');
+          if (store === ALL_STORE) {
+            const path = data[i].department.value.toLowerCase() + '/' + BESTSELLERS_DEPARTMENT + '.png';
+            try {
+              temp = require('./img/' + path);
+            } catch {
+              temp = require('./img/best-seller/Best-Seller.png');
+            }
+          } else if (data[i].department.value === BESTSELLERS_DEPARTMENT) {
+            try {
+              temp = require('./img/' + store.toLowerCase() + '/' + data[i].department.display + '.png');
+            } catch {
+              temp = require('./img/best-seller/Best-Seller.png');
+            }
           } else {
-            temp = require('./img/' + store.toLowerCase() + '/' + data[i].department + '.png');
+            temp = require('./img/' + store.toLowerCase() + '/' + data[i].department.display + '.png');
           }
         }
         catch {
-          var temp = require('./img/no_image.png');
+          temp = require('./img/no_image.png');
         }
         finally {
           img_list.push(temp)
@@ -127,43 +166,18 @@ class App extends Component {
             <div className="toolbar">
               <label>Store
                 <select id="store" onChange={this.handleStoreChange} value={store}>
-                  <option value="_all">All</option>
-                  <option value="amazon">Amazon</option>
-                  <option value="amazon-women">Amazon-Women</option>
-                  <option value="amazon-fashion">Amazon-Fashion</option>
-                  <option value="net-a-porter">Net-A-Porter</option>
-                  <option value="revolve">Revolve</option>
-                  <option value="shopbop">Shopbop</option>
-                  <option value="farfetch">FarFetch</option>
-                  <option value="moda-operandi">Moda-Operandi</option>
-                  <option value="zara">Zara</option>
-                  {/*<option value="solid and striped">Solid and Striped</option>*/}
+                  {Object.entries(STORES).map(([value, display]) => (
+                    <option value={value} key={value}>{display}</option>
+                  ))}
                 </select>
               </label>
               <label>Department
-                {store === '_all' ? (
-                  <select id="department" onChange={this.handleBestsellersChange} value={departmentSelect}>
-                    <option value=""></option>
-                    {departmentList ? (
-                        departmentList.map(d => (
-                          <option value={d.value} key={d.value}>{d.display}</option>
-                        ))
-                    ) : (
-                      <option value=""></option>
-                    )}
-                  </select>
-                ) : (
-                  <select id="department" onChange={this.handleDepartmentChange} value={departmentSelect}>
-                    <option value=""></option>
-                    {departmentList ? (
-                        departmentList.map(d => (
-                          <option value={d} key={d}>{d}</option>
-                        ))
-                    ) : (
-                      <option value=""></option>
-                    )}
-                  </select>
-                )}
+                <select id="department" onChange={this.handleDepartmentChange} value={department}>
+                  <option value={ALL_DEPARTMENT}></option>
+                  {departmentList.map(({ value, display }) => (
+                    <option value={value} key={value}>{display}</option>
+                  ))}
+                </select>
               </label>
             </div>
           </div>
@@ -171,7 +185,7 @@ class App extends Component {
             <Container fluid>
               {rowNums.map(i => {
                 const tiles = range(1, data[i-1].data.length).map(j => (
-                  <div className="personal">
+                  <div key={j} className="personal">
                     <span>{data[i-1].data[j-1].rank}</span>
                     <div className="product-image">
                       <a href={data[i-1].data[j-1].link} target="_blank">
@@ -186,49 +200,31 @@ class App extends Component {
 
                 if ( isMobile ) {
                   tiles.unshift(
-                    data[i-1].department ? (
-                      <div className="department-area">
-                        <img src={img_list[i-1]} />
-                        <h2>
-                          {data[i-1].department}
-                        </h2>
-                      </div>
-                    ) : (
-                      <div className="department-area">
-                        <img src={require('./img/best-seller/Best-Seller.png')} />
-                        <h2>
-                          Best Sellers
-                        </h2>
-                      </div>
-                    )
+                    <div key="ismobile" className="department-area">
+                      <img src={img_list[i-1]} />
+                      <h2>
+                        {data[i-1].department.display}
+                      </h2>
+                    </div>
                   )
                 }
 
                 return (
-                  <Row className="row">
+                  <Row key={i} className="row">
                     <Col md={3} xs={3}>
-                      {data[i-1].department ? (
-                        <div className="department-area">
-                          <img src={img_list[i-1]} />
-                          <h2>
-                            {data[i-1].department}
-                          </h2>
-                        </div>
-                      ) : (
-                        <div className="department-area">
-                          <img src={require('./img/best-seller/Best-Seller.png')} />
-                          <h2>
-                            Best Sellers
-                          </h2>
-                        </div>
-                      )}
+                      <div className="department-area">
+                        <img src={img_list[i-1]} />
+                        <h2>
+                          {data[i-1].department.display}
+                        </h2>
+                      </div>
 
                     </Col>
                     <Col md={9} xs={9}>
                       <div className="product-line">
                         {data[i-1].data.length >= 4 ? (() => {
                           const tiles = range(1, data[i-1].data.length).map(j => (
-                            <div className="personal" key={data[i-1].link}>
+                            <div className="personal" key={j}>
                               <span>{data[i-1].data[j-1].rank}</span>
                               <div className="product-image">
                                 <a href={data[i-1].data[j-1].link} target="_blank">
@@ -243,27 +239,18 @@ class App extends Component {
 
                           if ( isMobile ) {
                             tiles.unshift(
-                              data[i-1].department ? (
-                                <div className="department-area">
-                                  <img src={img_list[i-1]} />
-                                  <h2>
-                                    {data[i-1].department}
-                                  </h2>
-                                </div>
-                              ) : (
-                                <div className="department-area">
-                                  <img src={require('./img/best-seller/Best-Seller.png')} />
-                                  <h2>
-                                    Best Sellers
-                                  </h2>
-                                </div>
-                              )
+                              <div key="ismobile" className="department-area">
+                                <img src={img_list[i-1]} />
+                                <h2>
+                                  {data[i-1].department.display}
+                                </h2>
+                              </div>
                             )
                           }
 
-                          return data[i-1].department ? (
+                          return data[i-1].department.value !== BESTSELLERS_DEPARTMENT ? (
                             <div className="product-area">
-                             <Slider {...sliderSettings()} key={`${this.state.store}__${data[i-1].department}`}>
+                             <Slider {...sliderSettings()} key={`${this.state.store}__${data[i-1].department.value}`}>
                                   {tiles}
                               </Slider>
                             </div>
@@ -285,6 +272,7 @@ class App extends Component {
           ) : (
             <h2>Loading . . .</h2>
           )}
+          {error && <h2>Error: {error}</h2>}
         </div>
       </div>
     );
