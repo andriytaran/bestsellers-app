@@ -49,7 +49,7 @@ class App extends Component {
     this.state = {
       data: null,
       rowCount: 0,
-      store: ALL_STORE,
+      store: 'amazon-women',
       department: ALL_DEPARTMENT,
       departmentList: [],
       rankFirst: true,

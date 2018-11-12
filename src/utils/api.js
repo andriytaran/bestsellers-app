@@ -1,31 +1,36 @@
 import * as R from 'ramda';
 import { post } from './http';
 
-import { BESTSELLERS_DEPARTMENT, ALL_STORE, STORES, calculateBestsellers, ALL_DEPARTMENT } from './domain';
+import { BESTSELLERS_DEPARTMENT, ALL_STORE, STORES_ALL, calculateBestsellers, ALL_DEPARTMENT } from './domain';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
 /**
  * Normalize Store Data partly in-place and return normalized data back.
  * @param {Object} storeData API response body.
+ * @param {Object} props
  * @return {Object[]}
  */
-function normalizeStoreData (storeData, calculateBestSellers = true) {
+function normalizeStoreData (storeData, { calculateBestSellers = true, excludeBestSellers = false }) {
 	const productsByDepartment = storeData.data;
 	if (productsByDepartment.length === 0) return [];
 
 	// put bestsellers on top
 	const index = R.findIndex(d => d.department === '', productsByDepartment);
 	if (~index) {
-		if (index === 0) {
-			productsByDepartment[index].department = BESTSELLERS_DEPARTMENT;
+		if (excludeBestSellers && productsByDepartment.length > 1) {
+			productsByDepartment.splice(index, 1);
 		} else {
-			const bestsellers = productsByDepartment.splice(index, 1);
-			bestsellers.department = BESTSELLERS_DEPARTMENT;
-			productsByDepartment.unshift(bestsellers);
+			if (index === 0) {
+				productsByDepartment[index].department = BESTSELLERS_DEPARTMENT;
+			} else {
+				const bestsellers = productsByDepartment.splice(index, 1);
+				bestsellers.department = BESTSELLERS_DEPARTMENT;
+				productsByDepartment.unshift(bestsellers);
+			}
 		}
 	} else {
-		if (calculateBestSellers) {
+		if (calculateBestSellers && !excludeBestSellers) {
 			// calculate bestsellers by max rank if its not present in the list of departments
 			const bestsellers = {
 				data: calculateBestsellers(productsByDepartment),
@@ -45,16 +50,16 @@ function normalizeStoreData (storeData, calculateBestSellers = true) {
 	}));
 }
 
-export async function fetchDataByStore (store, { rankFirst }) {
+export async function fetchDataByStore (store, { rankFirst, excludeBestSellers = true }) {
 	if (store === ALL_STORE) {
-		const allstores = Object.keys(STORES).filter(s => s !== ALL_STORE);
-		const alldata = await Promise.all(allstores.map(store => fetchDataByStore(store, { rankFirst })));
+		const allstores = Object.keys(STORES_ALL).filter(s => s !== ALL_STORE);
+		const alldata = await Promise.all(allstores.map(store => fetchDataByStore(store, { rankFirst, excludeBestSellers: false })));
 		return alldata.map((ps, i) => ({
 			data: [],
 			...ps[0],
 			department: {
 				value: allstores[i],
-				display: STORES[allstores[i]] + ' ' + BESTSELLERS_DEPARTMENT
+				display: STORES_ALL[allstores[i]] + ' ' + BESTSELLERS_DEPARTMENT
 			}
 		}));
 	}
@@ -63,7 +68,7 @@ export async function fetchDataByStore (store, { rankFirst }) {
 		'store': store,
 		'is_first_rank': rankFirst
 	});
-	return normalizeStoreData(storeData);
+	return normalizeStoreData(storeData, { excludeBestSellers });
 }
 
 export async function fetchDataByDepartment (store, department, { rankFirst }) {
@@ -90,5 +95,5 @@ export async function fetchDataByDepartment (store, department, { rankFirst }) {
 		'is_first_rank': rankFirst
 	});
 
-	return normalizeStoreData(storeData, false);
+	return normalizeStoreData(storeData, { calculateBestsellers: false, excludeBestSellers: true });
 }
