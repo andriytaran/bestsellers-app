@@ -44,7 +44,7 @@ export function calculateBestsellers (productsByDepartment) {
 	const mapIndexed = R.addIndex(R.map);
 	const enumerateRank = mapIndexed((p, i) => ({
 		...p,
-		rank: i
+		rank: i + 1
 	}));
 
     return R.compose(
