@@ -50,34 +50,40 @@ function normalizeStoreData (storeData, { calculateBestSellers = true, excludeBe
 	}));
 }
 
-export async function fetchDataByStore (store, { rankFirst, excludeBestSellers = true }) {
+export async function fetchDataByStore ({ store, query, rankFirst, excludeBestSellers = true }) {
 	if (store === ALL_STORE) {
 		const allstores = Object.keys(STORES_ALL).filter(s => s !== ALL_STORE);
-		const alldata = await Promise.all(allstores.map(store => fetchDataByStore(store, { rankFirst, excludeBestSellers: false })));
-		return alldata.map((ps, i) => ({
-			data: [],
-			...ps[0],
-			department: {
-				value: allstores[i],
-				display: STORES_ALL[allstores[i]] + ' ' + BESTSELLERS_DEPARTMENT
-			}
-		}));
+		const alldata = await Promise.all(allstores.map(store => fetchDataByStore({ store, query, rankFirst, excludeBestSellers: false })));
+		return {
+			data: alldata.map((ps, i) => ({
+				data: [],
+				...ps.data[0],
+				department: {
+					value: allstores[i],
+					display: STORES_ALL[allstores[i]] + ' ' + BESTSELLERS_DEPARTMENT
+				}
+			})),
+			departmentList: []
+		};
 	}
-
-	const storeData = await post(`${API_URL}/products/`, {
+	const body = {
 		'store': store,
-		'is_first_rank': rankFirst
-	});
-	return normalizeStoreData(storeData, { excludeBestSellers });
+		'is_first_rank': rankFirst,
+	}
+	if (query) body.query = query;
+	const storeData = await post(`${API_URL}/products/`, body);
+	return {
+		data: normalizeStoreData(storeData, { excludeBestSellers }),
+		departmentList: storeData.department_list
+	};
 }
 
-export async function fetchDataByDepartment (store, department, { rankFirst }) {
+export async function fetchDataByDepartment ({ store, query, department, rankFirst }) {
 	if (department === ALL_DEPARTMENT) {
-		return fetchDataByStore(store, { rankFirst });
+		return fetchDataByStore({ store, query, rankFirst });
 	}
-
 	if (department === BESTSELLERS_DEPARTMENT) {
-		const productsByDepartment = await fetchDataByStore(store, { rankFirst });
+		const productsByDepartment = await fetchDataByStore({ store, query, rankFirst });
 		if (productsByDepartment.length) {
 			return [productsByDepartment[0]];
 		} else {
@@ -86,14 +92,19 @@ export async function fetchDataByDepartment (store, department, { rankFirst }) {
 	}
 
 	if (store === ALL_STORE) {
-		return fetchDataByDepartment(department, BESTSELLERS_DEPARTMENT, { rankFirst });
+		return fetchDataByDepartment({department: BESTSELLERS_DEPARTMENT, rankFirst, query });
 	}
 
-	const storeData = await post(`${API_URL}/products-department/`, {
+	const body = {
 		'store': store,
 		'department': department,
-		'is_first_rank': rankFirst
-	});
+		'is_first_rank': rankFirst,
+	};
+	if (query) body.query = query;
+	const storeData = await post(`${API_URL}/products-department/`, body);
 
-	return normalizeStoreData(storeData, { calculateBestsellers: false, excludeBestSellers: true });
+	return {
+		data: normalizeStoreData(storeData, { calculateBestsellers: false, excludeBestSellers: true }),
+		departmentList: storeData.department_list
+	};
 }
