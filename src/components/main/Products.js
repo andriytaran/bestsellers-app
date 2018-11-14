@@ -38,7 +38,7 @@ class Products extends Component {
     if ( isMobile ) {
       tiles.unshift(
         <div key="ismobile" className="department-area">
-          <img src={categoryImage} />
+          <img src={categoryImage} alt={category.department.display}/>
           <h2>
             {category.department.display}
           </h2>

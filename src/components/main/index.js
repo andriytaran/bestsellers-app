@@ -56,7 +56,7 @@ class MainPage extends Component {
   handleFilterChange (event) {
     const {name, value} = event.target;
     const options = {[name]: value};
-    if (name == 'shop') {
+    if (name === 'shop') {
       options.department = ALL_DEPARTMENT;
     }
     this.setState({

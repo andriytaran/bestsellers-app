@@ -17,7 +17,7 @@ class Category extends Component {
       <Row className="row">
         <Col md={3} xs={3}>
           <div className="department-area">
-            <img src={image} />
+            <img src={image} alt={category.department.display}/>
             <h2>
               {category.department.display}
             </h2>
