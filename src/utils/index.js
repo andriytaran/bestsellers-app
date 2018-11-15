@@ -7,20 +7,20 @@ export const departmentImage = (department, shop) => {
   var temp = '';
   try {
     if (shop === ALL_STORE) {
-      const path = department.value.toLowerCase() + '/' + BESTSELLERS_DEPARTMENT + '.png';
+      const path = department.toLowerCase() + '/' + BESTSELLERS_DEPARTMENT + '.png';
       try {
         temp = require('../img/' + path);
       } catch {
         temp = require('../img/best-seller/Best-Seller.png');
       }
-    } else if (department.value === BESTSELLERS_DEPARTMENT) {
+    } else if (department === BESTSELLERS_DEPARTMENT) {
       try {
-        temp = require('../img/' + shop.toLowerCase() + '/' + department.display + '.png');
+        temp = require('../img/' + shop.toLowerCase() + '/' + department + '.png');
       } catch {
         temp = require('../img/best-seller/Best-Seller.png');
       }
     } else {
-      temp = require('../img/' + shop.toLowerCase() + '/' + department.display + '.png');
+      temp = require('../img/' + shop.toLowerCase() + '/' + department + '.png');
     }
   }
   catch {

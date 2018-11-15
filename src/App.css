@@ -1,4 +1,4 @@
-@import "~slick-carousel/slick/slick.css"; 
+@import "~slick-carousel/slick/slick.css";
 @import "~slick-carousel/slick/slick-theme.css";
 
 .App {
@@ -101,7 +101,7 @@ body .product-line {
   width: 40px;
   height: 37px;
   box-shadow: 0px 0px 0px rgba(0,0,0,0.3);
-  z-index: 999999;
+  z-index: 2;
 }
 
 .slick-prev:before, .slick-next:before {
@@ -115,7 +115,7 @@ body .product-line {
   width: 40px;
   height: 37px;
   box-shadow: 0px 0px 30px rgba(0,0,0,0.3);
-  z-index: 999999;
+  z-index: 2;
 }
 
 .slick-next:hover, .slick-next:focus {
@@ -124,7 +124,7 @@ body .product-line {
   width: 40px;
   height: 37px;
   box-shadow: 0px 0px 30px rgba(0,0,0,0.3);
-  z-index: 999999;
+  z-index: 2;
 }
 
 .product-image {
@@ -236,7 +236,7 @@ h2.title span {
     left: 42%;
     font-weight: 600;
   }
-  
+
   .department-area {
     height: 300px;
   }
@@ -244,11 +244,11 @@ h2.title span {
   .product-area, .slick-slider, .slick-slide {
     height: 300px;
   }
-  
+
   .department-area img {
     height: 100%;
   }
-  
+
   .product-image img {
     height: 205px;
     margin-left: auto;
@@ -257,7 +257,7 @@ h2.title span {
     margin-top: 20px;
     padding-bottom: 25px;
   }
-  
+
   .product-title {
     text-align: center;
     width: 90%;
@@ -265,7 +265,7 @@ h2.title span {
     padding-left: 30px;
     min-height: 72px;
   }
-  
+
   .product-title a {
     color: #A1AAB9;
   }
@@ -286,7 +286,7 @@ h2.title span {
   .department-area h2 {
     left: 50%;
   }
-  
+
   .department-area {
     height: 280px;
   }
@@ -294,19 +294,19 @@ h2.title span {
   .product-area, .slick-slider, .slick-slide {
     height: 280px;
   }
-  
+
   .product-image img {
     height: 205px;
     margin-top: 5px;
     padding: 10px 0px;
   }
-  
+
   .product-title {
     width: 90%;
     margin-top: 0px;
     padding-left: 30px;
   }
-  
+
   .product-title a {
     color: #A1AAB9;
     font-size: 14px;
@@ -315,7 +315,7 @@ h2.title span {
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  
+
   .personal span {
     height: 26px;
     width: 26px;
@@ -330,7 +330,7 @@ h2.title span {
     left: 50%;
     font-size: 25px;
   }
-  
+
   .department-area {
     height: 260px;
   }
@@ -338,19 +338,19 @@ h2.title span {
   .product-area, .slick-slider, .slick-slide {
     height: 260px;
   }
-  
+
   .product-image img {
     height: 205px;
     margin-top: 5px;
     padding: 10px 0px;
   }
-  
+
   .product-title {
     width: 90%;
     margin-top: 0px;
     padding-left: 30px;
   }
-  
+
   .product-title a {
     color: #A1AAB9;
     font-size: 14px;
@@ -372,29 +372,29 @@ h2.title span {
   .slick-prev {
     left: -18px;
   }
-  
+
   .slick-next {
     right: -18px;
   }
-  
+
   .slick-slide {
     border-right: 1px solid #d3d7de;
   }
-  
+
   .slick-prev, .slick-next {
     width: 35px;
     height: 32px;
   }
-  
+
   .slick-prev:before, .slick-next:before {
     font-size: 35px;
   }
-  
+
   .slick-prev:hover, .slick-prev:focus {
     width: 35px;
     height: 32px;
   }
-  
+
   .slick-next:hover, .slick-next:focus {
     width: 35px;
     height: 32px;
@@ -463,4 +463,21 @@ h2.title span {
 }
 .product-grid .personal {
  max-width: 100%;
+}
+
+.react-select > div {
+    z-index: 10;
+}
+.main-search {
+  position: absolute;
+  right: 100px;
+  top: 2px;
+}
+.main-search label {
+  margin-right: 15px;
+}
+.main-search input {
+  margin-right: 15px;
+  width: 150px;
+  color: red;
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { fetchDataByDepartment } from '../../utils/api';
+import { fetchData } from '../../utils/api';
 import Category from './Category';
 import Filters from './Filters';
 import {
@@ -9,6 +9,8 @@ import {
   Container,
 } from 'reactstrap';
 
+const DEFAULT_DEPARTMENT = [{value: ALL_DEPARTMENT, label: 'ALL'}];
+
 class MainPage extends Component {
 
   constructor(props) {
@@ -17,7 +19,7 @@ class MainPage extends Component {
       data: null,
       filter: {
         shop: 'amazon-women',
-        department: ALL_DEPARTMENT,
+        department: DEFAULT_DEPARTMENT,
         query: ''
       },
       departmentList: [],
@@ -37,8 +39,8 @@ class MainPage extends Component {
     this.setState({
       data: null
     }, async () => {
-      const { filter: {shop, department, query}, rankFirst } = this.state;
-      const {data, departmentList } = await fetchDataByDepartment({ store: shop, department, query, rankFirst })
+      const { filter: {shop, query}, rankFirst } = this.state;
+      const {data, departmentList } = await fetchData({ store: shop, query, rankFirst })
         .catch( err => {
           this.setState({
             data: null,
@@ -46,25 +48,22 @@ class MainPage extends Component {
           });
           throw err;
         });
-      // debugger
-      const newState = {data, error: ''};
-      if (departmentList) newState.departmentList = departmentList;
-      this.setState(newState);
+      this.setState({data, departmentList, error: ''});
     });
   }
 
-  handleFilterChange (event) {
-    const {name, value} = event.target;
+  handleFilterChange ({name, value}) {
     const options = {[name]: value};
     if (name === 'shop') {
-      options.department = ALL_DEPARTMENT;
+      options.department = DEFAULT_DEPARTMENT;
     }
+    const callback = name !== 'department' ? this.fetchData : null;
     this.setState({
       filter: {
         ...this.state.filter,
         ...options
       }
-    }, this.fetchData)
+    }, callback)
   };
 
   checkViewport() {
@@ -74,24 +73,24 @@ class MainPage extends Component {
   }
 
   render () {
-    const { data, filter, isMobile, error , departmentList} = this.state;
+    const {data, filter, isMobile, error , departmentList} = this.state;
     let content;
     if (data) {
+      const departments = filter.department.map(d => d.value);
+      const categories = (data || []).filter(category => departments.includes(ALL_DEPARTMENT) || departments.includes(category.department));
       content = <Container fluid>
-        {data.map( (category, i) => <Category
+        {categories.map( (category, i) => <Category
           key={i}
           category={category}
           shop={filter.shop}
           isMobile={isMobile}
-
         />)}
       </Container>
     } else if (error) {
       content = <h2>Error: {error}</h2>
     } else {
-      content = <h2> Loading . . .</h2>;
+      content = <h2>Loading ... </h2>;
     }
-
 
     return (
       <div className="main-body">

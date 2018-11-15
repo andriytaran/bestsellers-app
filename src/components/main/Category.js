@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {departmentImage} from '../../utils';
 import Products from './Products';
-
+import { BESTSELLERS_DEPARTMENT } from '../../utils/domain';
 import {
   Row,
   Col
@@ -11,16 +11,15 @@ class Category extends Component {
   render () {
 
     const {category, shop, isMobile} = this.props;
-    const image = departmentImage(category.department, shop);
+    const categoryTitle = category.department === '' ? BESTSELLERS_DEPARTMENT : category.department;
+    const image = departmentImage(categoryTitle, shop);
 
     return (
       <Row className="row">
         <Col md={3} xs={3}>
           <div className="department-area">
-            <img src={image} alt={category.department.display}/>
-            <h2>
-              {category.department.display}
-            </h2>
+            <img src={image} alt={category.department}/>
+            <h2>{categoryTitle}</h2>
           </div>
         </Col>
         <Col md={9} xs={9}>
@@ -30,5 +29,4 @@ class Category extends Component {
     )
   }
 }
-
 export default Category;

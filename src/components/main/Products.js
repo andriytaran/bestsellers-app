@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
 import Slider from 'react-slick';
 import ProductCard from './ProductCard';
-import {
-  BESTSELLERS_DEPARTMENT,
-} from '../../utils/domain';
 
 const sliderSettings = ( slidesToShow = 4, slidesToScroll = 4 ) => ({
   dots: false,
@@ -38,23 +35,23 @@ class Products extends Component {
     if ( isMobile ) {
       tiles.unshift(
         <div key="ismobile" className="department-area">
-          <img src={categoryImage} alt={category.department.display}/>
+          <img src={categoryImage} alt={category.department}/>
           <h2>
-            {category.department.display}
+            {category.department}
           </h2>
         </div>
       )
     }
-
     if (productsCount >= 4) {
-      if (category.department.value !== BESTSELLERS_DEPARTMENT) {
+      if (category.department === '') {
+        // best sellers
+        content = <div className="product-grid">{tiles}</div>
+      } else {
         content = <div className="product-area">
-         <Slider {...sliderSettings()} key={category.department.value}>
+         <Slider {...sliderSettings()} key={category.department}>
             { tiles }
           </Slider>
         </div>
-      } else {
-        content = <div className="product-grid">{tiles}</div>
       }
     } else {
       content = <div className="product-area less" style={{width: `calc(100% / 4 * ${productsCount})`, borderRight: '1px solid #d3d7de'}}>
