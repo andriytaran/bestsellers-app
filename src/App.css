@@ -279,8 +279,8 @@ h2.title span {
 
 @media only screen and (max-width: 1366px) {
   .main-body {
-    margin-left: 8%;
-    margin-right: 8%;
+    margin-left: 4%;
+    margin-right: 4%;
   }
 
   .department-area h2 {
@@ -427,6 +427,7 @@ h2.title span {
   .main-body .row .col-9 h2 {
     display: none;
   }
+
 }
 
 
@@ -471,13 +472,31 @@ h2.title span {
 .main-search {
   position: absolute;
   right: 100px;
-  top: 2px;
+  top: 5px;
 }
-.main-search label {
+.main-search_label {
   margin-right: 15px;
 }
-.main-search input {
-  margin-right: 15px;
-  width: 150px;
-  color: red;
+
+@media only screen and (max-width: 768px) {
+  .body-header {
+    margin-top: 30px
+  }
+  .main-search {
+    display: flex;
+    position: relative;
+    margin: 10px 15px;
+    top: 0;
+    right: 0;
+    width: 100%;
+  }
+  .main-search .form-inline {
+    width: 100%;
+  }
+  .main-search .main-search_label {
+    display: none;
+  }
+  .main-search input.main-search_input {
+    width: 100%;
+  }
 }

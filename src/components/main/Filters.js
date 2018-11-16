@@ -42,7 +42,7 @@ class Filters extends Component {
     return (
       <div className="toolbar">
         <Row>
-          <Col md={2} xs={2}>
+          <Col lg={3}>
             <div className="form-group">
               <label>Store</label>
               <select className="form-control" onChange={this.handleDefaultChange} name="shop" value={filter.shop}>
@@ -52,7 +52,7 @@ class Filters extends Component {
               </select>
             </div>
           </Col>
-          <Col md={6} xs={6}>
+          <Col lg={6}>
             <div className="form-group">
               <label>Department</label>
               <Select
@@ -68,8 +68,8 @@ class Filters extends Component {
           </Col>
           <div className="main-search">
             <div className="form-inline">
-              <label className="text-left">Search  </label>
-              <input className="form-control" value={filter.query} name="query" placeholder="Type product title" onChange={this.handleDefaultChange}/>
+              <label className="text-left main-search_label">Search</label>
+              <input className="form-control main-search_input" value={filter.query} name="query" placeholder="Type product title" onChange={this.handleDefaultChange}/>
             </div>
           </div>
         </Row>
