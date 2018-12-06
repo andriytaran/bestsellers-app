@@ -469,6 +469,28 @@ h2.title span {
 .react-select > div {
     z-index: 10;
 }
+
+.react-select > input {
+  border-radius: 0.25rem;
+}
+
+.DateRangePicker {
+  z-index: 10;
+  display: block;
+}
+
+.DateRangePickerInput, .DateRangePicker .DateInput_input {
+  border-radius: 0.25rem;
+}
+
+.DateInput_input {
+  height: 33px
+}
+
+.DateRangePickerInput {
+  padding: 2px
+}
+
 .main-search {
   position: absolute;
   right: 100px;
@@ -498,5 +520,11 @@ h2.title span {
   }
   .main-search input.main-search_input {
     width: 100%;
+  }
+  .DateRangePicker, .DateRangePickerInput {
+    width: 100%;
+  }
+  .DateInput {
+    width: 45%;
   }
 }

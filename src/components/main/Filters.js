@@ -5,19 +5,21 @@ import {
 } from '../../utils/domain';
 import {Row, Col} from 'reactstrap';
 import Select from 'react-select';
+import { DateRangePicker } from 'react-dates';
 
 class Filters extends Component {
 
   constructor (props) {
     super(props);
     this.state = {
-      defaultDepartment: props.filter.department[0]
+      defaultDepartment: props.filter.department[0],
+      focusedDate: null,
+      startDate: props.filter.startDate,
+      endDate: props.filter.endDate
     }
-    this.handleDefaultChange = this.handleDefaultChange.bind(this);
-    this.handleDepartmentChange = this.handleDepartmentChange.bind(this);
   }
 
-  handleDepartmentChange (value) {
+  handleDepartmentChange = (value) => {
     const {onChange } = this.props;
     const {defaultDepartment} = this.state;
     if (value.length === 0) {
@@ -27,22 +29,32 @@ class Filters extends Component {
     }
   }
 
-  handleDefaultChange (e) {
+  handleDatesChange = (value) => {
+    const {onChange} = this.props;
+    const {startDate, endDate} = value;
+    if ((startDate !== this.state.startDate) || (endDate !== this.state.endDate)) {
+      this.setState({startDate, endDate}, () => {
+        onChange({startDate: startDate, endDate: endDate});
+      })
+    }
+  }
+
+  handleDefaultChange = (e) => {
     const {name, value} = e.target;
     const {onChange} = this.props;
     onChange({name, value});
   }
 
   render () {
-    const { departments, filter} = this.props;
-    const {defaultDepartment} = this.state;
+    const { departments, filter, isMobile} = this.props;
+    const {defaultDepartment, focusedDate, startDate, endDate} = this.state;
     const departmentOptions = departments.map(d => ({value: d, label: d === '' ? BESTSELLERS_DEPARTMENT : d, key: d}));
     departmentOptions.unshift(defaultDepartment);
 
     return (
       <div className="toolbar">
         <Row>
-          <Col lg={3}>
+          <Col lg={2}>
             <div className="form-group">
               <label>Store</label>
               <select className="form-control" onChange={this.handleDefaultChange} name="shop" value={filter.shop}>
@@ -52,7 +64,7 @@ class Filters extends Component {
               </select>
             </div>
           </Col>
-          <Col lg={6}>
+          <Col lg={5}>
             <div className="form-group">
               <label>Department</label>
               <Select
@@ -64,6 +76,22 @@ class Filters extends Component {
                 className="react-select"
                 onChange={this.handleDepartmentChange}
               />
+            </div>
+          </Col>
+          <Col lg={5}>
+            <div className="form-group">
+              <label>Dates</label>
+              <DateRangePicker
+                startDate={startDate}
+                startDateId="filterStartDate"
+                endDate={endDate}
+                orientation={isMobile ? "vertical" : "horizontal"}
+                endDateId="filterEndDate"
+                isOutsideRange={() => false}
+                focusedInput={focusedDate}
+                onFocusChange={focusedDate => this.setState({ focusedDate })}
+                onDatesChange={this.handleDatesChange}
+                />
             </div>
           </Col>
           <div className="main-search">
