@@ -53,8 +53,12 @@ class Products extends Component {
           </Slider>
         </div>
       }
+    } else if (productsCount === 0 ) {
+      content = <div className="product-area">
+       <h3> No items match the filter </h3>
+      </div>
     } else {
-      content = <div className="product-area less" style={{width: `calc(100% / 4 * ${productsCount})`, borderRight: '1px solid #d3d7de'}}>
+      content = <div className="product-area less" style={{width: `calc(100% / ${productsCount})`, borderRight: '1px solid #d3d7de'}}>
         <Slider {...sliderSettings(productsCount, productsCount)}>
           { tiles }
         </Slider>

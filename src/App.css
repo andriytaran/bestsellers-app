@@ -450,6 +450,11 @@ h2.title span {
  position: relative;
  overflow: hidden;
 }
+.product-area h3 {
+ text-align: center;
+ padding-top: 110px;
+ opacity: 0.5;
+}
 .product-grid .department-area img {
   width: 100%;
   height: auto;
