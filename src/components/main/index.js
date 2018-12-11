@@ -19,7 +19,7 @@ class MainPage extends Component {
     this.state = {
       data: null,
       filter: {
-        shop: 'amazon-women',
+        store: 'amazon-women',
         department: DEFAULT_DEPARTMENT,
         query: '',
         startDate: moment().subtract(1, 'weeks'),
@@ -58,7 +58,7 @@ class MainPage extends Component {
   handleFilterChange (options = {}) {
     let newFilter = {...options};
     if (options.name) {
-      if (options.name === 'shop') {
+      if (options.name === 'store') {
         options.department = DEFAULT_DEPARTMENT;
       }
       newFilter = {[options.name]: options.value};
@@ -91,7 +91,7 @@ class MainPage extends Component {
         content = categories.map( (category, i) => <Category
             key={i}
             category={category}
-            shop={filter.shop}
+            store={filter.store}
             isMobile={isMobile}
           />)
       }

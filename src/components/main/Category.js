@@ -10,9 +10,9 @@ import {
 class Category extends Component {
   render () {
 
-    const {category, shop, isMobile} = this.props;
+    const {category, store, isMobile} = this.props;
     const categoryTitle = category.department === '' ? BESTSELLERS_DEPARTMENT : category.department;
-    const image = departmentImage(categoryTitle, shop);
+    const image = departmentImage(categoryTitle, store);
 
     return (
       <Row className="row">

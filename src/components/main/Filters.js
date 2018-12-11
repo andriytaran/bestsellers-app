@@ -57,7 +57,7 @@ class Filters extends Component {
           <Col lg={2}>
             <div className="form-group">
               <label>Store</label>
-              <select className="form-control" onChange={this.handleDefaultChange} name="shop" value={filter.shop}>
+              <select className="form-control" onChange={this.handleDefaultChange} name="store" value={filter.store}>
                 {Object.entries(STORES).map(([value, display]) => (
                   <option value={value} key={value}>{display}</option>
                 ))}

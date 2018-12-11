@@ -11,6 +11,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 async function fetchStoresData (params) {
 	const allstores = Object.keys(STORES_ALL).filter(s => s !== ALL_STORE);
 	const data = await Promise.all(allstores.map(store => fetchProducts(mapParams({...params, store}))));
+
 	const departmentList = allstores.map(store => `${STORES_ALL[store]} ${BESTSELLERS_DEPARTMENT}`)
 	const sortedData = data.map((storeData, i) => {
 		return {
@@ -25,7 +26,7 @@ async function fetchStoresData (params) {
 }
 
 export async function fetchData (params) {
-	if (params.shop === ALL_STORE) {
+	if (params.store === ALL_STORE) {
 		return fetchStoresData(params);
 	}
 
@@ -47,6 +48,6 @@ function mapParams (params={}) {
 	if (params.startDate) body.start_date = moment(params.startDate).unix();
 	if (params.endDate) body.end_date = moment(params.endDate).unix();
 	if (params.query && params.query.length > 0) body.query = params.query;
-	if (params.shop) body.store = params.shop;
+	if (params.store) body.store = params.store;
 	return body
 }
