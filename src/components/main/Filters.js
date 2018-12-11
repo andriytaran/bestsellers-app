@@ -80,7 +80,7 @@ class Filters extends Component {
           </Col>
           <Col lg={5}>
             <div className="form-group">
-              <label>Dates</label>
+              <label>Calendar</label>
               <DateRangePicker
                 startDate={startDate}
                 startDateId="filterStartDate"
